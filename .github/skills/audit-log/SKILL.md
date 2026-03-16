@@ -33,7 +33,7 @@ entries:
 
 | フィールド | 型 | 必須 | 説明 |
 |---|---|---|---|
-| `timestamp` | ISO 8601 string | ✅ | エントリ記録時刻 |
+| `timestamp` | ISO 8601 string | ✅ | エントリ記録時刻。現在時刻をコマンドで取得して設定する |
 | `agent` | string | ✅ | エージェント名（orchestrator / requirements-analyst / planner / implementer / tester / reviewer） |
 | `model` | string | ✅ | 使用モデル名 |
 | `cycle` | integer | ✅ | サイクル番号 |
