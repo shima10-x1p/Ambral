@@ -14,6 +14,8 @@ import styles from "./App.module.css";
 function App() {
   return (
     <div className={styles.app}>
+      <div aria-hidden="true" className={styles.sidebarTitleBar} />
+      <div aria-hidden="true" className={styles.chatTitleBar} />
       <Sidebar />
       <ChatArea />
     </div>

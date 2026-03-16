@@ -21,6 +21,13 @@ export async function createMainWindow(): Promise<BrowserWindow> {
     height: WINDOW_HEIGHT,
     minWidth: 960,
     minHeight: 640,
+    titleBarStyle: "hidden",
+    titleBarOverlay: {
+      color: "#171717",
+      symbolColor: "#ececec",
+      height: 36,
+    },
+    autoHideMenuBar: true,
     webPreferences: {
       preload: resolvePreloadPath(),
       contextIsolation: true,

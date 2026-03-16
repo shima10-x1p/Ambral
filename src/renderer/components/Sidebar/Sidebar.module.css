@@ -1,12 +1,12 @@
 .sidebar {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  min-height: 100vh;
-  padding: 22px 18px 20px;
+  gap: 16px;
+  min-height: 0;
+  height: 100%;
+  padding: 12px 14px 14px;
   border-right: 1px solid var(--color-border);
   background: var(--color-sidebar-bg);
-  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.03);
 }
 
 .eyebrow {
@@ -19,14 +19,14 @@
 }
 
 .title {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   color: var(--color-text);
   font-size: 1.18rem;
   line-height: 1.35;
 }
 
 .description {
-  margin: 12px 0 0;
+  margin: 8px 0 0;
   color: var(--color-text-muted);
   font-size: 0.92rem;
   line-height: 1.65;
@@ -34,9 +34,9 @@
 
 .newChatButton {
   width: 100%;
-  padding: 13px 16px;
+  padding: 10px 14px;
   border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 18px;
+  border-radius: 14px;
   background: var(--color-primary);
   color: #ffffff;
   font-weight: 600;
@@ -47,16 +47,14 @@
 
 .newChatButton:hover {
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px rgba(91, 185, 140, 0.2);
 }
 
 .placeholder {
   margin-top: auto;
-  padding: 18px;
+  padding: 12px 14px;
   border: 1px solid var(--color-border);
-  border-radius: 20px;
+  border-radius: 14px;
   background: var(--color-bg-elevated);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
 }
 
 .placeholderTitle {
@@ -66,7 +64,7 @@
 }
 
 .placeholderText {
-  margin: 10px 0 0;
+  margin: 6px 0 0;
   color: var(--color-text-muted);
   font-size: 0.9rem;
   line-height: 1.6;

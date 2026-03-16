@@ -1,9 +1,37 @@
 .app {
   display: grid;
   grid-template-columns: 272px minmax(0, 1fr);
-  min-height: 100vh;
+  grid-template-rows: 36px minmax(0, 1fr);
+  height: 100vh;
+  overflow: hidden;
   background: var(--color-bg);
   color: var(--color-text);
+}
+
+.sidebarTitleBar {
+  grid-column: 1;
+  grid-row: 1;
+  background: var(--color-sidebar-bg);
+  -webkit-app-region: drag;
+}
+
+.chatTitleBar {
+  grid-column: 2;
+  grid-row: 1;
+  background: var(--color-surface);
+  -webkit-app-region: drag;
+}
+
+.app > :nth-child(3) {
+  grid-column: 1;
+  grid-row: 2;
+  min-height: 0;
+}
+
+.app > :nth-child(4) {
+  grid-column: 2;
+  grid-row: 2;
+  min-height: 0;
 }
 
 @media (max-width: 900px) {
