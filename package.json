@@ -1,0 +1,35 @@
+{
+  "name": "ambral",
+  "productName": "Ambral",
+  "version": "0.1.0",
+  "description": "Windows 向けのミニマルな AI チャットアプリです。",
+  "packageManager": "pnpm@10.6.3",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": ".vite/build/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@github/copilot-sdk": "latest",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "latest",
+    "@electron-forge/maker-squirrel": "latest",
+    "@electron-forge/maker-zip": "latest",
+    "@electron-forge/plugin-vite": "latest",
+    "@types/node": "^22.13.10",
+    "@types/react": "^19.0.10",
+    "@types/react-dom": "^19.0.4",
+    "@vitejs/plugin-react": "latest",
+    "electron": "^35.7.5",
+    "typescript": "^5.8.2",
+    "vite": "latest"
+  }
+}
