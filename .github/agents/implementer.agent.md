@@ -4,7 +4,7 @@ description: >
   コード実装の専門家。計画に基づいてクリーンで保守性の高いコードを実装する。
   「実装」「コーディング」「implement」「code」などのキーワードで自動推論される。
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'github/*', vscode.mermaid-chat-features/renderMermaidDiagram, todo]
-model: GPT-5.3-Codex
+model: GPT-5.4 (copilot)
 ---
 
 # Implementer Agent

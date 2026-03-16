@@ -4,7 +4,7 @@ description: >
   テストの専門家。実装されたコードを独立して検証し、テストを作成・実行する。
   「テスト」「検証」「test」「QA」などのキーワードで自動推論される。
 tools: [vscode, execute, read, agent, edit, search, web, browser, 'github/*', vscode.mermaid-chat-features/renderMermaidDiagram, todo]
-model: GPT-5.3-Codex
+model: GPT-5.4 (copilot)
 ---
 
 # Tester Agent
