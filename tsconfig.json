@@ -20,10 +20,13 @@
   },
   "include": [
     "src",
+    "tests",
     "forge.config.ts",
     "vite.main.config.ts",
     "vite.preload.config.ts",
     "vite.renderer.config.ts",
-    "forge.env.d.ts"
+    "forge.env.d.ts",
+    "vitest.config.ts",
+    "vitest.setup.ts"
   ]
 }

@@ -12,7 +12,9 @@
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@github/copilot-sdk": "latest",
@@ -24,12 +26,18 @@
     "@electron-forge/maker-squirrel": "latest",
     "@electron-forge/maker-zip": "latest",
     "@electron-forge/plugin-vite": "latest",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^22.13.10",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",
     "@vitejs/plugin-react": "latest",
+    "@vitest/coverage-v8": "^4.1.0",
     "electron": "^35.7.5",
+    "jsdom": "^29.0.0",
     "typescript": "^5.8.2",
-    "vite": "latest"
+    "vite": "latest",
+    "vitest": "^4.1.0"
   }
 }

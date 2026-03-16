@@ -29,6 +29,18 @@ pnpm start
 pnpm typecheck
 ```
 
+テストを実行する場合:
+
+```bash
+pnpm test
+```
+
+ウォッチモードでテストする場合:
+
+```bash
+pnpm test:watch
+```
+
 ## 現在の機能
 
 - サイドバー付きの単一チャット画面
@@ -40,6 +52,7 @@ pnpm typecheck
 - GitHub Copilot SDK 経由の単一セッション応答
 - モデル変更時の main process セッション再作成（UI 上の履歴は保持）
 - SDK 初期化失敗時・送信失敗時の UI エラー表示
+- Vitest + Testing Library による renderer / preload / main の自動テスト
 
 ## ディレクトリ構成
 
