@@ -1,9 +1,24 @@
-import { useEffect, useRef, useState, type KeyboardEvent } from "react";
+/**
+ * チャット入力欄と送信オプション UI を担当する View です。
+ * prompt 本文に加えて model / reasoningEffort を renderer state から受け取り、
+ * 送信時にはそのまま main process へ渡せる形を保ちます。
+ */
+import { useEffect, useRef, useState, type ChangeEvent, type KeyboardEvent } from "react";
+import {
+  availableModels,
+  reasoningEfforts,
+  type ModelId,
+  type ReasoningEffort,
+} from "@shared/types";
 import styles from "./ChatInput.module.css";
 
 interface ChatInputProps {
   isLoading: boolean;
+  model: ModelId;
   onSend(content: string): Promise<void>;
+  onModelChange(model: ModelId): void;
+  onReasoningEffortChange(reasoningEffort: ReasoningEffort): void;
+  reasoningEffort: ReasoningEffort;
 }
 
 /**
@@ -48,6 +63,14 @@ export function ChatInput(props: ChatInputProps) {
     await handleSubmit();
   }
 
+  function handleModelChange(event: ChangeEvent<HTMLSelectElement>): void {
+    props.onModelChange(event.target.value as ModelId);
+  }
+
+  function handleReasoningEffortChange(event: ChangeEvent<HTMLSelectElement>): void {
+    props.onReasoningEffortChange(event.target.value as ReasoningEffort);
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.composer}>
@@ -73,6 +96,40 @@ export function ChatInput(props: ChatInputProps) {
         >
           送信
         </button>
+      </div>
+
+      <div className={styles.optionsBar}>
+        <label className={styles.optionField}>
+          <span className={styles.optionLabel}>Model</span>
+          <select
+            className={styles.select}
+            disabled={props.isLoading}
+            onChange={handleModelChange}
+            value={props.model}
+          >
+            {availableModels.map((option) => (
+              <option key={option.id} value={option.id}>
+                {`${option.displayName} (${option.premiumMultiplier})`}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <label className={styles.optionField}>
+          <span className={styles.optionLabel}>Reasoning Effort</span>
+          <select
+            className={styles.select}
+            disabled={props.isLoading}
+            onChange={handleReasoningEffortChange}
+            value={props.reasoningEffort}
+          >
+            {reasoningEfforts.map((option) => (
+              <option key={option.id} value={option.id}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
     </div>
   );

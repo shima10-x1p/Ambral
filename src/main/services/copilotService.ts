@@ -1,5 +1,15 @@
+/**
+ * GitHub Copilot SDK との接続責務を閉じ込める service です。
+ * main process だけが SDK を知り、renderer にはテキスト応答だけを返します。
+ */
 import { execFileSync } from "node:child_process";
 import { approveAll, CopilotClient, type CopilotSession } from "@github/copilot-sdk";
+import {
+  DEFAULT_MODEL_ID,
+  DEFAULT_REASONING_EFFORT,
+  type ModelId,
+  type ReasoningEffort,
+} from "@shared/types";
 
 const RESPONSE_TIMEOUT_MS = 60_000;
 
@@ -9,18 +19,23 @@ const RESPONSE_TIMEOUT_MS = 60_000;
 class CopilotService {
   private client: CopilotClient | null = null;
 
+  private currentModel: ModelId | null = null;
+
   private initializationError: string | null = null;
+
+  private lastReasoningEffort: ReasoningEffort = DEFAULT_REASONING_EFFORT;
 
   private session: CopilotSession | null = null;
 
   /**
    * Copilot SDK を初期化し、単一セッションを作成します。
    *
+   * @param model - 起動直後に確保するセッションのモデル
    * @returns 初期化完了を表す Promise です。
    * @throws SDK の起動やセッション生成に失敗した場合
    */
-  async initialize(): Promise<void> {
-    if (this.client && this.session) {
+  async initialize(model: ModelId = DEFAULT_MODEL_ID): Promise<void> {
+    if (this.client && this.session && this.currentModel === model) {
       return;
     }
 
@@ -35,13 +50,13 @@ class CopilotService {
 
     try {
       await client.start();
-      const session = await client.createSession({
-        onPermissionRequest: approveAll,
-      });
+      const session = await this.createSession(client, model);
 
       this.client = client;
+      this.currentModel = model;
       this.session = session;
     } catch (caughtError: unknown) {
+      this.currentModel = null;
       this.initializationError = mapCopilotErrorMessage(caughtError, cliPath);
 
       try {
@@ -58,10 +73,20 @@ class CopilotService {
    * Copilot セッションへメッセージを送り、最終応答を返します。
    *
    * @param prompt - 送信するユーザープロンプト
+   * @param model - 応答生成に使うモデル
+   * @param reasoningEffort - renderer で選択された推論量
    * @returns アシスタントの最終応答テキストです。
    * @throws SDK 未初期化、タイムアウト、認証失敗などで応答を取得できない場合
    */
-  async sendMessage(prompt: string): Promise<string> {
+  async sendMessage(
+    prompt: string,
+    model: ModelId,
+    reasoningEffort: ReasoningEffort,
+  ): Promise<string> {
+    // モデル変更時はセッションを張り替え、履歴 UI は renderer 側で保持します。
+    await this.ensureSessionForModel(model);
+    this.lastReasoningEffort = reasoningEffort;
+
     const session = this.getSession();
     const response = await session.sendAndWait({ prompt }, RESPONSE_TIMEOUT_MS);
     const content = response?.data.content.trim();
@@ -84,6 +109,7 @@ class CopilotService {
 
     this.session = null;
     this.client = null;
+    this.currentModel = null;
 
     if (session) {
       try {
@@ -119,8 +145,70 @@ class CopilotService {
       "GitHub Copilot SDK が初期化されていません。GitHub Copilot CLI のインストールとログイン状態を確認してください。",
     );
   }
+
+  private async ensureSessionForModel(model: ModelId): Promise<void> {
+    if (!this.client || !this.session) {
+      await this.initialize(model);
+      return;
+    }
+
+    if (this.currentModel !== model) {
+      await this.recreateSession(model);
+    }
+  }
+
+  private async recreateSession(model: ModelId): Promise<void> {
+    const client = this.getClient();
+    const currentSession = this.session;
+
+    this.session = null;
+    this.currentModel = null;
+
+    if (currentSession) {
+      try {
+        await currentSession.disconnect();
+      } catch (caughtError: unknown) {
+        console.error("GitHub Copilot セッションの再作成前の切断に失敗しました。", caughtError);
+      }
+    }
+
+    try {
+      const nextSession = await this.createSession(client, model);
+      this.session = nextSession;
+      this.currentModel = model;
+      this.initializationError = null;
+    } catch (caughtError: unknown) {
+      this.initializationError = mapCopilotErrorMessage(caughtError, resolveCopilotCliPath());
+      throw new Error(this.initializationError);
+    }
+  }
+
+  private async createSession(
+    client: CopilotClient,
+    model: ModelId,
+  ): Promise<CopilotSession> {
+    return client.createSession({
+      model,
+      onPermissionRequest: approveAll,
+    });
+  }
+
+  private getClient(): CopilotClient {
+    if (this.client) {
+      return this.client;
+    }
+
+    if (this.initializationError) {
+      throw new Error(this.initializationError);
+    }
+
+    throw new Error("GitHub Copilot SDK のクライアントが初期化されていません。");
+  }
 }
 
+/**
+ * SDK 由来の例外を、ユーザーが対処しやすい分類済みメッセージへ変換します。
+ */
 function mapCopilotErrorMessage(caughtError: unknown, cliPath: string): string {
   const rawMessage = extractErrorMessage(caughtError);
   const normalizedMessage = rawMessage.toLowerCase();
@@ -170,6 +258,9 @@ function extractErrorMessage(caughtError: unknown): string {
   return "不明なエラー";
 }
 
+/**
+ * Windows では `.cmd` より `copilot.exe` の方が SDK 起動と相性が良いため優先解決します。
+ */
 function resolveCopilotCliPath(): string {
   if (process.platform === "win32") {
     return resolveWindowsCliPath();
@@ -195,6 +286,9 @@ function resolveWindowsCliPath(): string {
   return "copilot.exe";
 }
 
+/**
+ * `where.exe` の結果から存在する CLI パス候補を列挙します。
+ */
 function runWhereCommand(commandName: string): string[] {
   try {
     const stdout = execFileSync("where.exe", [commandName], {

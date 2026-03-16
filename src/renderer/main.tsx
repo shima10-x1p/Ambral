@@ -1,3 +1,7 @@
+/**
+ * React renderer の起点です。
+ * グローバルスタイルを読み込み、`#root` にアプリをマウントします。
+ */
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";

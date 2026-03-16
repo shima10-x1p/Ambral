@@ -35,7 +35,10 @@ pnpm typecheck
 - Enter 送信 / Shift+Enter 改行
 - 最新メッセージへの自動スクロール
 - 送信中のローディング表示
+- モデル選択ドロップダウン（18 モデル、倍率表示付き）
+- Reasoning Effort 選択（low / medium / high、既定値は medium）
 - GitHub Copilot SDK 経由の単一セッション応答
+- モデル変更時の main process セッション再作成（UI 上の履歴は保持）
 - SDK 初期化失敗時・送信失敗時の UI エラー表示
 
 ## ディレクトリ構成
@@ -66,4 +69,5 @@ pnpm typecheck
 ## 補足
 
 - renderer から Node.js API や Copilot SDK を直接参照しません
+- model / reasoningEffort の選択値は shared の型定義を通して renderer → preload → main へ受け渡します
 - Copilot SDK の初期化に失敗してもアプリ自体は起動し、送信時にエラーを表示します

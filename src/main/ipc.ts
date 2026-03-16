@@ -1,3 +1,7 @@
+/**
+ * renderer から届く送信リクエストを Copilot service へ中継する IPC ハンドラです。
+ * 画面側には例外を直接漏らさず、表示用のエラーメッセージへ正規化して返します。
+ */
 import { ipcMain } from "electron";
 import {
   IPC_CHANNELS,
@@ -29,8 +33,13 @@ async function handleSendMessage(request: SendMessageRequest): Promise<SendMessa
   }
 
   try {
+    // model / reasoningEffort は shared 契約に従って renderer から到着します。
     return {
-      content: await copilotService.sendMessage(prompt),
+      content: await copilotService.sendMessage(
+        prompt,
+        request.model,
+        request.reasoningEffort,
+      ),
     };
   } catch (caughtError: unknown) {
     return {
@@ -39,6 +48,9 @@ async function handleSendMessage(request: SendMessageRequest): Promise<SendMessa
   }
 }
 
+/**
+ * 例外をユーザー向けの短い表示文へ変換します。
+ */
 function extractErrorMessage(caughtError: unknown): string {
   if (caughtError instanceof Error) {
     return caughtError.message;

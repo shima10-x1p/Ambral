@@ -1,3 +1,7 @@
+/**
+ * メッセージ一覧と空状態の表示を担当します。
+ * 新規メッセージやローディングに追従して末尾へ自動スクロールします。
+ */
 import { useEffect, useRef } from "react";
 import { MessageItem } from "../MessageItem/MessageItem";
 import type { ChatViewMessage } from "../../types/chat";
@@ -20,6 +24,7 @@ export function MessageList(props: MessageListProps) {
   const { error, isLoading, messages } = props;
 
   useEffect(() => {
+    // 送受信やエラー追加のたびに最新位置へ寄せ、単一セッション体験を保ちます。
     bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
   }, [error, isLoading, messages]);
 

@@ -1,3 +1,7 @@
+/**
+ * 単一メッセージカードの描画コンポーネントです。
+ * role と isError に応じて見た目だけを切り替え、データ加工は行いません。
+ */
 import { messageRoles } from "@shared/types";
 import type { ChatViewMessage } from "../../types/chat";
 import styles from "./MessageItem.module.css";
@@ -33,6 +37,7 @@ export function MessageItem(props: MessageItemProps) {
     return null;
   }
 
+  // renderer の表示ラベルだけをここで切り替え、shared の role 値自体は変更しません。
   const isUser = props.message.role === messageRoles.User;
   const isError = props.message.isError === true;
   const roleLabel = isUser ? "You" : isError ? "Error" : "Assistant";

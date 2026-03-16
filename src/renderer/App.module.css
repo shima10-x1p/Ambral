@@ -1,12 +1,13 @@
 .app {
   display: grid;
-  grid-template-columns: 260px minmax(0, 1fr);
+  grid-template-columns: 272px minmax(0, 1fr);
   min-height: 100vh;
   background: var(--color-bg);
+  color: var(--color-text);
 }
 
 @media (max-width: 900px) {
   .app {
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: 224px minmax(0, 1fr);
   }
 }

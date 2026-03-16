@@ -1,3 +1,7 @@
+/**
+ * renderer 専用の表示型を定義します。
+ * shared の ChatMessage を土台に、UI が必要とする表示用メタ情報だけを追加します。
+ */
 import type { ChatMessage } from "@shared/types";
 
 /**

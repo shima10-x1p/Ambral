@@ -1,3 +1,8 @@
+/**
+ * チャット画面のコンテナです。
+ * ViewModel から取得した state を MessageList / ChatInput に配線するだけに絞り、
+ * UI の責務分離を維持します。
+ */
 import { useChat } from "../../hooks/useChat";
 import { ChatInput } from "../ChatInput/ChatInput";
 import { MessageList } from "../MessageList/MessageList";
@@ -9,7 +14,16 @@ import styles from "./ChatArea.module.css";
  * @returns メッセージ一覧と入力欄を含む UI です。
  */
 export function ChatArea() {
-  const { error, isLoading, messages, sendMessage } = useChat();
+  const {
+    error,
+    isLoading,
+    messages,
+    model,
+    reasoningEffort,
+    sendMessage,
+    setModel,
+    setReasoningEffort,
+  } = useChat();
 
   return (
     <section className={styles.chatArea}>
@@ -21,7 +35,14 @@ export function ChatArea() {
       </header>
 
       <MessageList error={error} isLoading={isLoading} messages={messages} />
-      <ChatInput isLoading={isLoading} onSend={sendMessage} />
+      <ChatInput
+        isLoading={isLoading}
+        model={model}
+        onModelChange={setModel}
+        onReasoningEffortChange={setReasoningEffort}
+        onSend={sendMessage}
+        reasoningEffort={reasoningEffort}
+      />
     </section>
   );
 }

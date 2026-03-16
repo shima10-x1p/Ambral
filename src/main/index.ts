@@ -1,3 +1,7 @@
+/**
+ * Electron main process のエントリポイントです。
+ * ウィンドウ生成・IPC 登録・Copilot service のライフサイクル管理を担当します。
+ */
 import path from "node:path";
 import { app, BrowserWindow } from "electron";
 import { registerIpcHandlers } from "./ipc";
@@ -42,6 +46,7 @@ function resolveRendererHtmlPath(): string {
 }
 
 function handleActivate(): void {
+  // macOS ではウィンドウを閉じてもプロセスを維持する慣習があるため再生成を許可します。
   if (BrowserWindow.getAllWindows().length === 0) {
     void createMainWindow();
   }
@@ -61,6 +66,7 @@ async function bootstrap(): Promise<void> {
   await app.whenReady();
 
   try {
+    // 初期化失敗時も UI 自体は起動継続し、送信時に分かりやすいエラーを返します。
     await copilotService.initialize();
   } catch (caughtError: unknown) {
     console.error("GitHub Copilot SDK の初期化に失敗しました。", caughtError);

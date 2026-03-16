@@ -1,17 +1,18 @@
 :root {
-  --color-bg: #f4f7f5;
-  --color-bg-elevated: #fbfcfb;
-  --color-surface: #ffffff;
-  --color-sidebar-bg: #eef3f0;
-  --color-text: #163126;
-  --color-text-muted: #5b7369;
-  --color-text-subtle: #89a096;
-  --color-border: #d8e4dd;
-  --color-border-strong: #c5d4cc;
-  --color-user-msg-bg: #dff4e9;
-  --color-assistant-msg-bg: #ffffff;
-  --color-primary: #357c5c;
-  --color-input-bg: #fdfefd;
+  color-scheme: dark;
+  --color-bg: #212121;
+  --color-bg-elevated: #2a2a2a;
+  --color-surface: #2f2f2f;
+  --color-sidebar-bg: #171717;
+  --color-text: #ececec;
+  --color-text-muted: #a0a0a0;
+  --color-text-subtle: #6b6b6b;
+  --color-border: #3a3a3a;
+  --color-border-strong: #4a4a4a;
+  --color-user-msg-bg: #2b3a35;
+  --color-assistant-msg-bg: #303030;
+  --color-primary: #5bb98c;
+  --color-input-bg: #383838;
   color: var(--color-text);
   background: var(--color-bg);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -57,10 +58,10 @@ button {
 ::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 999px;
-  background: rgba(91, 115, 105, 0.35);
+  background: rgba(160, 160, 160, 0.28);
   background-clip: padding-box;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.02);
 }
